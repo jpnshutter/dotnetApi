@@ -22,28 +22,28 @@ namespace TodoApi.Controllers{
 
 
         private string GenerateJwtToken(User user)
+{
+    var tokenHandler = new JwtSecurityTokenHandler();
+    var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]);
+    var tokenDescriptor = new SecurityTokenDescriptor
     {
-        // Generate token that is valid for 7 days
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]);
-        var tokenDescriptor = new SecurityTokenDescriptor
+        Subject = new ClaimsIdentity(new[]
         {
-            Subject = new ClaimsIdentity(new[]
-            {
-                new Claim("Id", user.Id.ToString()),
-                new Claim(ClaimTypes.Role, user.Role)
-            }),
-            Expires = DateTime.UtcNow.AddDays(7),
-            Audience = "your_desired_audience",
-            SigningCredentials = new SigningCredentials(
-        new SymmetricSecurityKey(key),
-        SecurityAlgorithms.HmacSha256Signature,
-        SecurityAlgorithms.Sha256Digest
-    )
-        };
-        var token = tokenHandler.CreateToken(tokenDescriptor);
-        return tokenHandler.WriteToken(token);
-    }
+            new Claim("Id", user.Id.ToString()),
+            new Claim(ClaimTypes.Role, user.Role) // Ensure this is added
+        }),
+        Expires = DateTime.UtcNow.AddDays(7),
+        Audience = _configuration["Jwt:Audience"], // Ensure audience is set correctly
+        Issuer = _configuration["Jwt:Issuer"], // Ensure issuer is set correctly
+        SigningCredentials = new SigningCredentials(
+            new SymmetricSecurityKey(key),
+            SecurityAlgorithms.HmacSha256Signature
+        )
+    };
+    var token = tokenHandler.CreateToken(tokenDescriptor);
+    return tokenHandler.WriteToken(token);
+}
+
         [HttpPost("Signin")]
         [AllowAnonymous]
         public IActionResult GetUser([FromBody] User user){

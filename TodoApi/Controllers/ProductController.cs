@@ -12,15 +12,18 @@ namespace TodoApi.Controllers{
         private readonly AppicationContext _context;
         public ProductController(AppicationContext context){
             _context =context;
-        }
-        [HttpGet("Products")]
+        } 
         [Authorize(Roles ="admin,user")]
+        [HttpGet("Products")]
+        
         public IActionResult Get(){
             var products =_context.Products.ToList();
             return Ok(products);
         }
+        
         [HttpGet("Product/{id}")]
         [Authorize(Roles ="admin,user")]
+        
         public IActionResult GetProduct([FromRoute] int id){
             var product = _context.Products.FirstOrDefault(x=>x.Id == id);
             if(product!=null){
@@ -29,15 +32,17 @@ namespace TodoApi.Controllers{
             return NotFound();
             
         }
-        [HttpPost("Products")]
         [Authorize(Roles ="admin")]
+        [HttpPost("Products")]
+        
         public IActionResult Save([FromBody] Product product){
             _context.Products.Add(product);
             _context.SaveChanges(); //for save state
             return Ok(product);
         }
-        [HttpPut("Products")]
         [Authorize(Roles ="admin")]
+        [HttpPut("Products")]
+        
         public IActionResult UPdate([FromBody] Product product){
             var result =_context.Products.AsNoTracking().FirstOrDefault(x => x.Id == product.Id);
             if(result!=null){
@@ -48,9 +53,9 @@ namespace TodoApi.Controllers{
             return NotFound();
            
         }
-
-        [HttpDelete("Products")]
         [Authorize(Roles ="admin")]
+        [HttpDelete("Products")]
+        
         public IActionResult delete([FromQuery] int id){
             var deleteProduct =_context.Products.AsNoTracking().FirstOrDefault(x=>x.Id ==id);
             if(deleteProduct==null){
