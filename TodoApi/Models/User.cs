@@ -13,6 +13,14 @@ namespace TodoApi.Models
         public string Password{get;set;}
     }
 
+    public class Signup{
+        public string Username{get;set;}
+        public string Password{get;set;}
+
+        public string Role{get;set;}
+
+    }
+
 
 
 

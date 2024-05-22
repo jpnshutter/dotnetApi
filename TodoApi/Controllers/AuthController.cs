@@ -59,11 +59,16 @@ namespace TodoApi.Controllers{
         }
         [HttpPost("Singup")]
         [AllowAnonymous]
-        public IActionResult Save([FromBody] User user){
-            user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
-            _context.User.Add(user);
+        public IActionResult Save([FromBody] Signup user){
+            var newUser = new User
+            {
+                Username = user.Username,
+                Password = BCrypt.Net.BCrypt.HashPassword(user.Password),
+                Role = user.Role
+            };
+            _context.User.Add(newUser);
             _context.SaveChanges(); //for save state
-            return Ok(user);
+            return Ok(newUser);
         }
         
 
