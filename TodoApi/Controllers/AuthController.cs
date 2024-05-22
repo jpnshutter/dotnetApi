@@ -46,7 +46,7 @@ namespace TodoApi.Controllers{
 
         [HttpPost("Signin")]
         [AllowAnonymous]
-        public IActionResult GetUser([FromBody] User user){
+        public IActionResult GetUser([FromBody] Signin user){
             
                 var userObj = _context.User.FirstOrDefault(x => x.Username == user.Username);
                 if (userObj != null && BCrypt.Net.BCrypt.Verify(user.Password, userObj.Password))
