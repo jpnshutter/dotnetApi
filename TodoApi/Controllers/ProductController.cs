@@ -64,7 +64,7 @@ namespace TodoApi.Controllers{
             _context.Products.Entry(deleteProduct).State =EntityState.Deleted ; //method 1
             // _context.Products.Remove(deleteProduct); //method2
             _context.SaveChanges();
-            return Ok();
+            return Ok(_context.Products);
         }
     }
 }

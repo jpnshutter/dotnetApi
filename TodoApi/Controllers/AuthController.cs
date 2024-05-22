@@ -30,11 +30,11 @@ namespace TodoApi.Controllers{
         Subject = new ClaimsIdentity(new[]
         {
             new Claim("Id", user.Id.ToString()),
-            new Claim(ClaimTypes.Role, user.Role) // Ensure this is added
+            new Claim(ClaimTypes.Role, user.Role) 
         }),
         Expires = DateTime.UtcNow.AddDays(7),
-        Audience = _configuration["Jwt:Audience"], // Ensure audience is set correctly
-        Issuer = _configuration["Jwt:Issuer"], // Ensure issuer is set correctly
+        Audience = _configuration["Jwt:Audience"], 
+        Issuer = _configuration["Jwt:Issuer"], 
         SigningCredentials = new SigningCredentials(
             new SymmetricSecurityKey(key),
             SecurityAlgorithms.HmacSha256Signature
@@ -54,14 +54,11 @@ namespace TodoApi.Controllers{
 
             if (result != null)
             {
-                // Retrieve the actual User object from the database
                 var userObj = _context.User.FirstOrDefault(x => x.Username == user.Username && x.Password == user.Password);
-
                 if (userObj != null)
                 {
-                    // Generate and return JWT token
                     var token = GenerateJwtToken(userObj);
-                    return Ok(new { username =userObj.Username,token });
+                    return Ok(new { username =userObj.Username,role=result.Role,token });
                 }
             }
             return NotFound();
