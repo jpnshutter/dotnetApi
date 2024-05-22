@@ -47,25 +47,20 @@ namespace TodoApi.Controllers{
         [HttpPost("Signin")]
         [AllowAnonymous]
         public IActionResult GetUser([FromBody] User user){
-            var result = _context.User
-                .Where(x => x.Username == user.Username && x.Password == user.Password)
-                .Select(x => new { x.Username, x.Password, x.Role })
-                .FirstOrDefault();
-
-            if (result != null)
-            {
-                var userObj = _context.User.FirstOrDefault(x => x.Username == user.Username && x.Password == user.Password);
-                if (userObj != null)
+            
+                var userObj = _context.User.FirstOrDefault(x => x.Username == user.Username);
+                if (userObj != null && BCrypt.Net.BCrypt.Verify(user.Password, userObj.Password))
                 {
                     var token = GenerateJwtToken(userObj);
-                    return Ok(new { username =userObj.Username,role=result.Role,token });
+                    return Ok(new { username =userObj.Username,role=userObj.Role,token });
                 }
-            }
+            
             return NotFound();
         }
         [HttpPost("Singup")]
         [AllowAnonymous]
         public IActionResult Save([FromBody] User user){
+            user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
             _context.User.Add(user);
             _context.SaveChanges(); //for save state
             return Ok(user);

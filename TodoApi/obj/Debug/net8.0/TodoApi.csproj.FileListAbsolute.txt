@@ -271,3 +271,4 @@
 /Users/jp/Desktop/backend/dotnetlearn/dotnetApi/TodoApi/obj/Debug/net8.0/TodoApi.pdb
 /Users/jp/Desktop/backend/dotnetlearn/dotnetApi/TodoApi/obj/Debug/net8.0/TodoApi.genruntimeconfig.cache
 /Users/jp/Desktop/backend/dotnetlearn/dotnetApi/TodoApi/obj/Debug/net8.0/ref/TodoApi.dll
+/Users/jp/Desktop/backend/dotnetlearn/dotnetApi/TodoApi/bin/Debug/net8.0/BCrypt.Net-Next.dll
